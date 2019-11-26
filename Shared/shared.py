@@ -62,13 +62,14 @@ def no_more_filler(field_code):
     Looks for field that starts with 'FILLER' and drop the corresponding entry
     Returns shorter library pd.DataFrame
     '''
+    import re
 
     field_code = field_code[[False if re.search('^FILLER',i) else True for i in field_code['field']]]
     field_code.reset_index(inplace = True)
     field_code.drop(columns = ['index'], inplace = True)
     return field_code
 
-def convert_to_csv(text_file, csv_file, column_dictionary)
+def convert_to_csv(text_file, csv_file, column_dictionary):
     '''
     Pass fwf text, destination csv, column dictionary
     Read one line of the text file into python at a time
@@ -90,7 +91,7 @@ def convert_to_csv(text_file, csv_file, column_dictionary)
             for line in f:
                 line = f.readline()
                 items = []
-                for i in range(0,len(asdf)):
+                for i in range(0,len(c_dict)):
                     # print(i)
                     from_here = c_dict['start'][i]-1
                     to_here = c_dict['end'][i]
