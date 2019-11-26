@@ -81,7 +81,7 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
     j=0
 
     c_dict = column_dictionary
-    with open(csv_file,'a') as c:
+    with open(csv_file,'w') as c:
         wc = csv.writer(c,quoting=csv.QUOTE_ALL)
         
         # Write header
