@@ -54,12 +54,58 @@ def create_column_dictionary(text_file):
 #             print('check range for: ', i,  field_code['field'][i], field_code['start'][i], '-', 
 #                   field_code['end'][i], field_code['length'][i])
 
-
-
     return field_code
 
 
+def no_more_filler(field_code):
+    '''
+    Looks for field that starts with 'FILLER' and drop the corresponding entry
+    Returns shorter library pd.DataFrame
+    '''
+
+    field_code = field_code[[False if re.search('^FILLER',i) else True for i in field_code['field']]]
+    field_code.reset_index(inplace = True)
+    field_code.drop(columns = ['index'], inplace = True)
+    return field_code
+
+def convert_to_csv(text_file, csv_file, column_dictionary)
+    '''
+    Pass fwf text, destination csv, column dictionary
+    Read one line of the text file into python at a time
+    Break each row apart into list and write onto csv
+    '''
+
+    import csv
+    # for tracking
+    j=0
+
+    c_dict = column_dictionary
+    with open(csv_file,'a') as c:
+        wc = csv.writer(c,quoting=csv.QUOTE_ALL)
+        
+        # Write header
+        wc.writerow(list(c_dict['field']))
+
+        with open(text_file, 'r+') as f:
+            for line in f:
+                line = f.readline()
+                items = []
+                for i in range(0,len(asdf)):
+                    # print(i)
+                    from_here = c_dict['start'][i]-1
+                    to_here = c_dict['end'][i]
+                    items += [line[from_here:to_here]]
+                    # print(from_here, to_here)
+
+                wc.writerow(items)
+        # keep track of progress
+                j += 1
+                # if j>5:
+                #     break
+                if j%10000 == 0:
+                    print(j)
 
 
-create_column_dictionary('UG2018.txt')
-
+field_code = create_column_dictionary('UG2018.txt')
+field_code = no_more_filler(field_code)
+convert_to_csv('Nat2018PublicUS.c20190509.r20190717.txt','CSV2018.csv',field_code)
