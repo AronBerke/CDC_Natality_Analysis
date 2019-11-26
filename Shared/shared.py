@@ -89,7 +89,7 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
 
         with open(text_file, 'r+') as f:
             for line in f:
-                line = f.readline()
+                # line = f.readline()
                 items = []
                 for i in range(0,len(c_dict)):
                     # print(i)
