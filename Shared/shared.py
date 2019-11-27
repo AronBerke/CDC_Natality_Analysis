@@ -78,10 +78,11 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
 
     import csv
     import re
+    import time
 
     # for tracking
     j=0
-
+    start_at = time.time()
     c_dict = column_dictionary
     with open(csv_file,'w') as c:
         wc = csv.writer(c,quoting=csv.QUOTE_ALL)
@@ -109,7 +110,8 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
                 # if j>5:
                 #     break
                 if j%10000 == 0:
-                    print(j)
+                    print(j, time.time() - start_at)
+    print(j-1, time.time() - start_at)
 
 
 field_code = create_column_dictionary('UG2018.txt')
