@@ -37,7 +37,7 @@ def create_column_dictionary(text_file):
                                      columns = ['start','end','length','field'])
     print(field_code_ug2018.columns)
     
-    if text_file == 'ug2018.txt':
+    if text_file.lower() == 'ug2018.txt':
         field_code = field_code.append(field_code_ug2018,ignore_index= True,sort = 'start')
         field_code = field_code.sort_values('start').reset_index().drop(columns='index')
         print(field_code.tail(20))
@@ -77,6 +77,8 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
     '''
 
     import csv
+    import re
+
     # for tracking
     j=0
 
@@ -95,7 +97,10 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
                     # print(i)
                     from_here = c_dict['start'][i]-1
                     to_here = c_dict['end'][i]
-                    items += [line[from_here:to_here]]
+                    if re.search(r'\A\s+\Z', line[from_here:to_here]):
+                        items += [""]
+                    else:
+                        items += [line[from_here:to_here]]
                     # print(from_here, to_here)
 
                 wc.writerow(items)
