@@ -35,14 +35,14 @@ def create_column_dictionary(text_file):
                                       [328,328,1,'f_RF_INFT'], [499,500,2,'OEGest_Comb'], 
                                       [501,502,2,'OEGest_R10'], [503,503,1,'OEGest_R3']], 
                                      columns = ['start','end','length','field'])
-    print(field_code_ug2018.columns)
+    # print(field_code_ug2018.columns)
     
     if text_file.lower() == 'ug2018.txt':
         field_code = field_code.append(field_code_ug2018,ignore_index= True,sort = 'start')
         field_code = field_code.sort_values('start').reset_index().drop(columns='index')
         print(field_code.tail(20))
 
-    print(field_code.columns)
+    # print(field_code.columns)
     
 
     # Find inconsistencies
@@ -85,7 +85,7 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
     start_at = time.time()
     c_dict = column_dictionary
     with open(csv_file,'w') as c:
-        wc = csv.writer(c,quoting=csv.QUOTE_ALL)
+        wc = csv.writer(c,quoting=csv.QUOTE_MINIMAL)
         
         # Write header
         wc.writerow(list(c_dict['field']))
@@ -93,13 +93,13 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
         with open(text_file, 'r+') as f:
             for line in f:
                 # line = f.readline()
-                items = []
+                items = [""]
                 for i in range(0,len(c_dict)):
                     # print(i)
                     from_here = c_dict['start'][i]-1
                     to_here = c_dict['end'][i]
                     if re.search(r'\A\s+\Z', line[from_here:to_here]):
-                        items += [""]
+                        items += [""] # Needs to mathc the quoting set above
                     else:
                         items += [line[from_here:to_here]]
                     # print(from_here, to_here)
@@ -107,9 +107,9 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
                 wc.writerow(items)
         # keep track of progress
                 j += 1
-                # if j>5:
+                if j>5:
                 #     break
-                if j%10000 == 0:
+                # if j%10000 == 0:
                     print(j, time.time() - start_at)
     print(j-1, time.time() - start_at)
 
