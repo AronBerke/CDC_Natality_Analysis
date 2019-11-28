@@ -117,3 +117,21 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
 field_code = create_column_dictionary('UG2018.txt')
 field_code = no_more_filler(field_code)
 convert_to_csv('Nat2018PublicUS.c20190509.r20190717.txt','CSV2018.csv',field_code)
+
+def create_table_from_SQL(user, database, password, query):
+    '''
+    - A function that returns a pandas dataframe from a SQL query in python
+    ---------------
+    - user: user for your local SQL connection in string format
+    - database: schema name where your database is stored in string format
+    - password: password to access your local SQL connection in string format
+    - query: SQL query in string format; enclose with double quotes and use single quotes
+    to designate VARCHAR values within queries; use schema_name.table_name after FROM statement
+    '''
+    cnx = mysql.connector.connect(user=user, database=database, password=password)
+    cursor = cnx.cursor()
+    query = query
+    cursor.execute(query)
+    df = pd.DataFrame(cursor.fetchall())
+    df.columns = cursor.column_names
+    return df
