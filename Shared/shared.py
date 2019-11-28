@@ -128,6 +128,7 @@ def create_table_from_SQL(user, database, password, query):
     - query: SQL query in string format; enclose with double quotes and use single quotes
     to designate VARCHAR values within queries; use schema_name.table_name after FROM statement
     '''
+    import mysql.connector
     cnx = mysql.connector.connect(user=user, database=database, password=password)
     cursor = cnx.cursor()
     query = query
