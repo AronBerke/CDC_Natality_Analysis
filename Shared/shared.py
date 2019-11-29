@@ -123,16 +123,16 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
                 wc.writerow(items)
         # keep track of progress
                 j += 1
-                if j>5:
+                # if j>5:
                 #     break
-                # if j%10000 == 0:
+                if j%10000 == 0:
                     print(j, time.time() - start_at)
     print(j-1, time.time() - start_at)
 
 
-field_code = create_column_dictionary('UG2018.txt')
+field_code = create_column_dictionary('UG2017.txt')
 field_code = no_more_filler(field_code)
-convert_to_csv('Nat2018PublicUS.c20190509.r20190717.txt','CSV2018.csv',field_code)
+convert_to_csv('Nat2017PublicUS.c20180516.r20180808.txt','CSV2017.csv',field_code)
 
 def create_table_from_SQL(user, database, password, query):
     '''
