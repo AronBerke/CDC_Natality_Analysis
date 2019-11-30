@@ -23,7 +23,7 @@ def downsample_df (df):
     n_class0 = len(index_class0)
 
     # Randomly sample the same number of observations from class 1 as in class 0, without replacement
-    random.seed(0)
+    np.random.seed(0)
     index_class1_downsampled = np.random.choice(index_class1, size=n_class0, replace=False)
 
     # Create dataframes for NICU and downsampled non-NICU
