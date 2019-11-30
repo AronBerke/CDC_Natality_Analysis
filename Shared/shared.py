@@ -45,6 +45,11 @@ def create_column_dictionary(text_file):
                                       [328, 328, 1, 'f_RF_INFT'],[499, 500, 2, 'OEGest_Comb'],
                                       [501, 502, 2, 'OEGest_R10'],[503, 503, 1, 'OEGest_R3']],
                                      columns = ['start','end','length','field'])
+    
+    field_code_ug2008 = pd.DataFrame([[609, 609, 1, 'F_LD_AUGMENT']],
+                                     columns = ['start','end','length','field'])
+    
+
 
     # Combine missing entries 
     if text_file.lower() == 'ug2018.txt':
@@ -55,6 +60,9 @@ def create_column_dictionary(text_file):
         field_code = field_code.sort_values('start').reset_index().drop(columns='index')
     elif text_file.lower() == 'ug2016.txt':
         field_code = field_code.append(field_code_ug2016,ignore_index= True,sort = 'start')
+        field_code = field_code.sort_values('start').reset_index().drop(columns='index')
+    elif text_file.lower() == 'ug2008.txt':
+        field_code = field_code.append(field_code_ug2008,ignore_index= True,sort = 'start')
         field_code = field_code.sort_values('start').reset_index().drop(columns='index')
 
     print(field_code.columns)
@@ -93,12 +101,11 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
     '''
 
     import csv
-    import re
     import time
-
-    # for tracking
-    j=0
+    import re
+    
     start_at = time.time()
+    j=0
     c_dict = column_dictionary
     with open(csv_file,'w') as c:
         wc = csv.writer(c,quoting=csv.QUOTE_MINIMAL)
@@ -108,31 +115,34 @@ def convert_to_csv(text_file, csv_file, column_dictionary):
 
         with open(text_file, 'r+') as f:
             for line in f:
-                # line = f.readline()
-                items = [""]
+
+#                 items = ["" if re.search(r'\A\s+\Z',line[c_dict['start'][i]-1 : c_dict['end'][i]]) 
+#                          else line[c_dict['start'][i]-1 : c_dict['end'][i]] 
+#                          for i in range(0,len(c_dict))]
+                items = []
                 for i in range(0,len(c_dict)):
-                    # print(i)
+#                     print(i)
                     from_here = c_dict['start'][i]-1
                     to_here = c_dict['end'][i]
                     if re.search(r'\A\s+\Z', line[from_here:to_here]):
-                        items += [""] # Needs to mathc the quoting set above
+                        items += [""]
                     else:
                         items += [line[from_here:to_here]]
-                    # print(from_here, to_here)
+#                     print(from_here, to_here)
 
                 wc.writerow(items)
-        # keep track of progress
+#         keep track of progress
                 j += 1
-                # if j>5:
-                #     break
-                if j%10000 == 0:
-                    print(j, time.time() - start_at)
-    print(j-1, time.time() - start_at)
+                if j>20:
+                    break
+#                 if j%10000 == 0:
+#                     print(j, time.time() - start_at)
+    print('done at',j, 'in', time.time() - start_at)
 
 
 field_code = create_column_dictionary('UG2017.txt')
 field_code = no_more_filler(field_code)
-convert_to_csv('Nat2017PublicUS.c20180516.r20180808.txt','CSV2017.csv',field_code)
+convert_to_csv('Nat2017PublicUS.c20180516.r20180808.txt','CSV2017Head.csv',field_code)
 
 def create_table_from_SQL(user, database, password, query):
     '''
