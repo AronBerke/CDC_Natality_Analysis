@@ -162,3 +162,26 @@ def create_table_from_SQL(user, database, password, query):
     df = pd.DataFrame(cursor.fetchall())
     df.columns = cursor.column_names
     return df
+
+def continuous_eda(df, var_list):
+    '''
+    - A function that analyzes the relationship of a continuous variable to an abnormality target variable
+    - Returns overlapping histograms for Y/N target variable groups and a bar graph with means for
+    Y/N groups side-by-side. Two-way t-test results are returned underneath the graph.
+    ---------------
+    - df: the dataframe containing variables of interest
+    - var_list: a list of continuous variables as strings
+    '''
+    for x in var_list:
+        a = df[df.CA_CCHD=='Y'][x]
+        b = df[df.CA_CCHD=='N'][x]
+        plt.figure()
+        plt.subplot(1,2,1)
+        plt.hist(a, color='red',alpha=0.3)
+        plt.hist(b, color='blue', alpha=0.3)
+        plt.figtext(0,0,stats.ttest_ind(a,b))
+        plt.title('dist '+x)
+        plt.subplot(1,2,2)
+        plt.bar('Y', np.mean(a), alpha=0.3)
+        plt.bar('N', np.mean(b), alpha=0.3)
+        plt.title('mean '+x)
