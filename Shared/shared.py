@@ -163,7 +163,7 @@ def create_table_from_SQL(user, database, password, query):
     df.columns = cursor.column_names
     return df
 
-def continuous_eda(df, var_list):
+def continuous_eda(df, var_list, target_var):
     '''
     - A function that analyzes the relationship of a continuous variable to an abnormality target variable
     - Returns overlapping histograms for Y/N target variable groups and a bar graph with means for
@@ -171,17 +171,18 @@ def continuous_eda(df, var_list):
     ---------------
     - df: the dataframe containing variables of interest
     - var_list: a list of continuous variables as strings
+    - target_var: the target abnormality
     '''
     for x in var_list:
-        a = df[df.CA_CCHD=='Y'][x]
-        b = df[df.CA_CCHD=='N'][x]
+        a = df[df[target_var]=='Y'][x]
+        b = df[df[target_var]=='N'][x]
         plt.figure()
         plt.subplot(1,2,1)
-        plt.hist(a, color='red',alpha=0.3)
-        plt.hist(b, color='blue', alpha=0.3)
-        plt.figtext(0,0,stats.ttest_ind(a,b))
-        plt.title('dist '+x)
+            plt.hist(a, color='red',alpha=0.3)
+            plt.hist(b, color='blue', alpha=0.3)
+            plt.figtext(0,0,stats.ttest_ind(a,b))
+            plt.title('dist '+x)
         plt.subplot(1,2,2)
-        plt.bar('Y', np.mean(a), alpha=0.3)
-        plt.bar('N', np.mean(b), alpha=0.3)
-        plt.title('mean '+x)
+            plt.bar('Y', np.mean(a), alpha=0.3)
+            plt.bar('N', np.mean(b), alpha=0.3)
+            plt.title('mean '+x)
