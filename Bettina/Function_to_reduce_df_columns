@@ -1,3 +1,7 @@
+list_to_drop = ['flag','territory', 'imputed']
+# you can use as many/few of these and include / remove any other column
+
+
 def create_reduced_df (df, list_to_drop):
 
     '''
@@ -7,6 +11,7 @@ def create_reduced_df (df, list_to_drop):
 
     import pandas as pd
     import numpy as np
+    import re
 
     # create list of flags, territory info and imputed info likely to be dropped together
     flags = list(filter(lambda i: re.search('\AF_',i) , df.columns))
@@ -19,7 +24,7 @@ def create_reduced_df (df, list_to_drop):
     df2 = df.copy()
 
     # compare columns in case they have already been dropped in the input df
-    
+
 
     # drop columns
     for feature in list_to_drop:
