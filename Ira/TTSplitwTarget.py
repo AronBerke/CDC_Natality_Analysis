@@ -4,6 +4,8 @@ def targetchoice(column,dataframe):
     Takes a column and a dataframe, returns four values for;
     x_train, X_test, y_train, and y_test
     '''
+    from sklearn.model_selection import train_test_split
+    
     #Cutting the data and target dataframes
     sample_data = dataframe.loc[:, dsample.columns != column ]
     sample_target = dataframe.loc[:,column]
