@@ -27,8 +27,8 @@ def downsample_df (df):
     index_class1_downsampled = np.random.choice(index_class1, size=n_class0, replace=False)
 
     # Create dataframes for NICU and downsampled non-NICU
-    df_NICU = df.iloc[index_class0]
-    df_adj_NONICU = df.iloc[index_class1_downsampled]
+    df_NICU = df_no_unknown.iloc[index_class0]
+    df_adj_NONICU = df_no_unknown.iloc[index_class1_downsampled]
 
     # Append into 1 dataframe
     df_downsampled = df_NICU.append(df_adj_NONICU)
