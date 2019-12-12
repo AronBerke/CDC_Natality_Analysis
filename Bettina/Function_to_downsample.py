@@ -4,6 +4,9 @@ def downsample_df (df):
     Remove undefined information on NICU admissions (AB_NICU == 'U'),
     create a binary target vector, and create a "balanced" dataframe
     with all NICU admissions and matching numbers of randomly selected non-NICU admissions.
+    -----------------------
+    df: full dataframe
+    (variable: variable or defect of interest (here AB_NICU))
     '''
 
     import pandas as pd
